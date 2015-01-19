@@ -1,14 +1,16 @@
 {
-  _id: ''
-  rfc:'',
-  nombre:'',
-  email: '',
-  calle: '',
-  numeroExterior: '',
-  numeroInterior: '',
-  colonia:'',
-  codigoPostal:'',
-  localidad:'',
-  municipio:'',
-  estado:''
+  "id": "",
+  "rfc":"",
+  "nombre":"",
+  "email": "",
+  "calle": "",
+  "numeroExterior": "",
+  "numeroInterior": "",
+  "colonia":"",
+  "codigoPostal":"",
+  "localidad":"",
+  "municipio":"",
+  "estado":"",
+  "actualizado":"",
+  "creado":""
 }
