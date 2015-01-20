@@ -1,2 +1,0 @@
-//create database
-curl -X PUT http://localhost:5984/contribuyentes

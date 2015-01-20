@@ -1,0 +1,5 @@
+//create database
+curl -X PUT http://localhost:5984/contribuyentes
+//create por_rfc view
+curl -X PUT http://localhost:5984/contribuyentes/_design/contribuyentes/por_rfc -d {"por_rfc":{ "map": "function(doc) { if ('rfc' in doc) { emit(doc.rfc, doc); } }" }};
+
