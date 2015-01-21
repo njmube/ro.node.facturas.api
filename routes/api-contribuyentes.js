@@ -20,8 +20,8 @@ router.get('/buscar/:rfc', function(req, res, next){
   request.get({
     url: urlViews + "_view/por_rfc",
     qs:{
-      startkey: JSON.stringify(req.query.q),
-      endkey: JSON.stringify(req.query.q + "\ufff0")
+      startkey: JSON.stringify(req.params.q),
+      endkey: JSON.stringify(req.params.q + "\ufff0")
     }
   }, function(err, couchRes, body){
     // couldn't connect to CouchDB
@@ -67,7 +67,7 @@ router.post('/crear/', function(req, res, next){
 
 router.get('/ver/:id', function(req, res, next){
   request.get({
-    url: url + "?rev=" + req.query.id
+    url: url + "/" + req.params.id
   }, function(err, couchRes, body){
     // couldn't connect to CouchDB
     if (err) {
