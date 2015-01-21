@@ -1,9 +1,9 @@
 {
   "contribuyentes": [
-    { "method": "GET",    "url": "/api/contribuyentes/buscar/:rfc", "desc": "Busca un contribuyente por rfc" },
-    { "method": "POST",   "url": "/api/contribuyentes/crear/",      "desc": "Crea un contribuyente" },
-    { "method": "GET",    "url": "/api/contribuyentes/ver/:id",     "desc": "Consulta un contribuyente existente" },
-    { "method": "DELETE", "url": "/api/contribuyentes/borrar/:id",  "desc": "Borra un contribuyente existente" },
-    { "method": "GET",  "url": "/api/contribuyentes/modelo",      "desc": "Muestra el Modelo en formato JSON para esta api" }
+    { "method": "GET",    "url": "/api/contribuyentes/buscar/:rfc",      "desc": "Busca un contribuyente por rfc" },
+    { "method": "POST",   "url": "/api/contribuyentes/crear/",           "desc": "Crea un contribuyente" },
+    { "method": "GET",    "url": "/api/contribuyentes/ver/:id",          "desc": "Consulta un contribuyente existente" },
+    { "method": "DELETE", "url": "/api/contribuyentes/borrar/:id/:rev",  "desc": "Borra un contribuyente existente" },
+    { "method": "GET",  "url": "/api/contribuyentes/modelo",             "desc": "Muestra el Modelo en formato JSON para esta api" }
   ]
 }

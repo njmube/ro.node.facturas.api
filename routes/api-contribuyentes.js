@@ -67,7 +67,7 @@ router.post('/crear/', function(req, res, next){
 
 router.get('/ver/:id', function(req, res, next){
   request.get({
-    url: urlViews + "?rev=" + req.query.id
+    url: url + "?rev=" + req.query.id
   }, function(err, couchRes, body){
     // couldn't connect to CouchDB
     if (err) {
@@ -85,9 +85,9 @@ router.get('/ver/:id', function(req, res, next){
 
 });
 
-router.delete('/borrar/:id', function(req, res, next){
-  request.delete({
-    url: urlViews + "?rev=" + req.query.id
+router.delete('/borrar/:id/:rev/', function(req, res, next){
+  request.del({
+    url: url + "/" + req.params.id + "?rev=" + req.params.rev
   }, function(err, couchRes, body){
     // couldn't connect to CouchDB
     if (err) {
