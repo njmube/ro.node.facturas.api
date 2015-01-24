@@ -65,6 +65,33 @@ router.post('/crear/', function(req, res, next){
   
 });
 
+router.post('/actualizar/:id', function(req, res, next){
+  req.accepts('application/json');
+  let deferred = Q.defer();
+  let model = JSON.parse(req.body);
+  delete model["creado"]; //do not modify creation date
+  
+  request.put({
+    url: url,
+    json: JSON.stringify(model)
+  }, 
+  function(err, couchRes, body){
+    if (err) {
+      deferred.reject(err);
+    } else {
+      deferred.resolve([couchRes, body]);
+    }
+  });
+
+  deferred.promise.then(function(args) {
+    let couchRes = args[0], body = args[1];
+    res.status(couchRes.statusCode).json(body);
+  }, function(err) {
+    res.status(502).json({ error: "bad_gateway", reason: err.code });
+  });
+
+});
+
 router.get('/ver/:id', function(req, res, next){
   request.get({
     url: url + "/" + req.params.id

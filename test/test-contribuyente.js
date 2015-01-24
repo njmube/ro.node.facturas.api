@@ -8,7 +8,8 @@ nconf.file('settings.json').env();
 const      url = nconf.get('localhost'),
        urlPost = url + sitemap.contribuyentes[1].url,
      urlDelete = url + sitemap.contribuyentes[3].url,
-        urlGet = url + sitemap.contribuyentes[2]i.url;
+        urlGet = url + sitemap.contribuyentes[2].url,
+        urlPut = url + sitemap.contribuyentes[5].url;
 
 let getModel = function() {
   let c = {
@@ -44,7 +45,7 @@ function logUrl(method, url, statusCode, model) {
 
 let model = getModel();
 
-exports.testCreate = { 
+exports.testContribuyentesApi = { 
 
   setUp: function(callback) {
     callback();
@@ -114,5 +115,50 @@ exports.testCreate = {
       });
       
     });
-  }
+  } /*,
+
+  testActualizarContribuyente: function(test) {
+    test.expect(17);
+    request.put({
+      url: urlPost,
+      form: model
+    },
+    function(err, response, body) {
+      let result = JSON.parse(body);
+      model.id = result.id;
+      model.rev = result.rev;
+      logUrl("POST", urlPost, response.statusCode);
+      if (err) {
+        return console.error('Error al crear contribuyente:', err);
+      }
+      test.equal(response.statusCode, 200);
+      request.get({
+        url: setUrlParams(urlGet, model)
+      }, function(err, response, body){
+        logUrl("GET", urlGet, response.statusCode, model);
+        if (err) {
+          return console.error('Error al obtener contribuyente:', err);
+        }
+
+        test.equal(response.statusCode, 200);
+        let modelFromDb = JSON.parse(body);
+        test.equal(modelFromDb._id, model.id);
+        test.equal(modelFromDb._rev, model.rev);
+        test.equal(modelFromDb.rfc, model.rfc);
+        test.equal(modelFromDb.nombre, model.nombre);
+        test.equal(modelFromDb.email, model.email);
+        test.equal(modelFromDb.calle, model.calle);
+        test.equal(modelFromDb.numeroExterior, model.numeroExterior);
+        test.equal(modelFromDb.numeroInterior, model.numeroInterior);
+        test.equal(modelFromDb.colonia, model.colonia);
+        test.equal(modelFromDb.codigoPostal, model.codigoPostal);
+        test.equal(modelFromDb.localidad, model.localidad);
+        test.equal(modelFromDb.municipio, model.municipio);
+        test.equal(modelFromDb.estado, model.estado);
+        test.equal(modelFromDb.actualizado, model.actualizado);
+        test.equal(modelFromDb.creado, model.creado);
+        test.done();
+      });
+    });
+  }*/
 }
