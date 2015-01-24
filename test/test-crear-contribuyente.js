@@ -5,10 +5,10 @@ const request = require('request'),
 
 nconf.file('settings.json').env();
 
-const     url  = nconf.get('localhost'),
-      urlPost  = url + sitemap.contribuyentes[1].url,
+const      url = nconf.get('localhost'),
+       urlPost = url + sitemap.contribuyentes[1].url,
      urlDelete = url + sitemap.contribuyentes[3].url,
-        urlGet = url + sitemap.contribuyentes[2].url;
+        urlGet = url + sitemap.contribuyentes[2]i.url;
 
 let getModel = function() {
   let c = {
@@ -90,7 +90,7 @@ exports.testCreate = {
         
         logUrl("GET", urlGet, response.statusCode, model);
         if (err) {
-          return console.error('Error al crear contribuyente:', err);
+          return console.error('Error al obtener contribuyente:', err);
         }
         
         test.equal(response.statusCode, 200);
