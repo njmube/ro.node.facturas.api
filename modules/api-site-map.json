@@ -5,6 +5,6 @@
     "ver": {"method": "GET", "url": "/api/contribuyentes/ver/:id", "desc": "Consulta un contribuyente existente"},
     "borrar": { "method": "DELETE", "url": "/api/contribuyentes/borrar/:id/:rev", "desc": "Borra un contribuyente existente" },
     "modelo": {"method": "GET", "url": "/api/contribuyentes/modelo", "desc": "Muestra el Modelo en formato JSON para esta api"},
-    "actualizar": {"method": "PUT", "url": "/api/contribuyentes/actualizar/:id", "desc": "Actualiza un modelo existente"{
+    "actualizar": {"method": "PUT", "url": "/api/contribuyentes/actualizar/:id", "desc": "Actualiza un modelo existente"}
   }
 }

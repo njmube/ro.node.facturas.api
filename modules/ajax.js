@@ -15,8 +15,8 @@ function setUrlParams(url, model) {
   return url;
 }
 
-function getRequest(group, name, model) {
-  switch(sitemap[group][name][method]){
+function getRequest(group, name, model) {  
+  switch(sitemap[group][name]["method"]){
     case "GET":
         return request.get;
     case "POST":
@@ -25,14 +25,13 @@ function getRequest(group, name, model) {
         return request.put;
     case "DELETE":
         return request.del;
-    case default:
-        return request.get;
   }
+  return request.get;
 }
 
 function getRequestConfig(group, name, model){
-  let method = sitemap[group][name][method]);
-  let reqUrl = hostUrl + sitemap[group][name][url];
+  let method = sitemap[group][name]["method"];  
+  let reqUrl = hostUrl + sitemap[group][name]["url"];
   
   if (method != "POST" && method != "PUT"){
     return { url: setUrlParams(reqUrl, model) };
@@ -45,7 +44,7 @@ function getRequestConfig(group, name, model){
   
 }
 
-let getPromise = function(group, name, model) {
+exports.getPromise = function(group, name, model) {
   let deferred = Q.defer();
   let req = getRequest(group, name);
   let conf = getRequestConfig(group, name, model);
@@ -59,16 +58,4 @@ let getPromise = function(group, name, model) {
   });
 
   return deferred.promise;
-  
-  /*
-  deferred.promise.then(function(args) {
-    let response = args[0], body = args[1];
-     
-  }, function(err) {
-    
-  });*/
-
-  return deferred.promise;
 }
-
-exports.promise = promise;

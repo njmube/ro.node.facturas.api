@@ -1,15 +1,7 @@
 'use strict';
 const request = require('request'),
-        nconf = require('nconf'),
-      sitemap = require('./../modules/api-site-map.json');
-
-nconf.file('settings.json').env();
-
-const      url = nconf.get('localhost'),
-       urlPost = url + sitemap.contribuyentes[1].url,
-     urlDelete = url + sitemap.contribuyentes[3].url,
-        urlGet = url + sitemap.contribuyentes[2].url,
-        urlPut = url + sitemap.contribuyentes[5].url;
+      sitemap = require('./../modules/api-site-map.json'),
+         ajax = require('./../modules/ajax.js');
 
 let getModel = function() {
   let c = {
@@ -28,7 +20,7 @@ let getModel = function() {
     estado: "Michoacán",
     actualizado: Date.now(),
     creado: Date.now()
-  }
+ }
   return c;
 }
 
@@ -52,113 +44,68 @@ exports.testContribuyentesApi = {
   },
 
   tearDown: function(callback) {
-    request.del({
-      url: setUrlParams(urlDelete, model)
-    },
-    function(err, response, body){
-      logUrl("DELETE", urlDelete, response.statusCode, model);
-      if (err) {
-        return console.error('Error al borrar contribuyente:', err);
-      }
-
+    let promise = ajax.getPromise("contribuyentes", "borrar", model);
+  
+    promise.then(function(args) {
+      let response = args[0], body = args[1];
+      logUrl("DELETE", sitemap["contribuyentes"]["borrar"]["url"], response.statusCode, model);
       callback();
+    }, function(err) {
+      return console.error('Error al borrar contribuyente', err);
     });
+
   },
 
   testCrearContribuyente: function(test) {
   
     test.expect(17);
+    
+    let promise = ajax.getPromise("contribuyentes", "crear", model);
+    
+    let createCallback = function(args) {      
+      let response = args[0], body = args[1];      
 
-    request.post({
-      url: urlPost,
-      form: model
-    },
-    function(err, response, body) {
       let result = JSON.parse(body);
       model.id = result.id;
       model.rev = result.rev;
-      logUrl("POST", urlPost, response.statusCode);
 
-      if (err) {
-        return console.error('Error al crear contribuyente:', err);
-      }
+      logUrl("POST", sitemap["contribuyentes"]["crear"]["url"], response.statusCode);
       
       test.equal(response.statusCode, 201);      
-       
-      request.get({
-        url: setUrlParams(urlGet, model)
-      }, function(err, response, body){
-        
-        logUrl("GET", urlGet, response.statusCode, model);
-        if (err) {
-          return console.error('Error al obtener contribuyente:', err);
-        }
-        
-        test.equal(response.statusCode, 200);
-        let modelFromDb = JSON.parse(body);        
-        test.equal(modelFromDb._id, model.id);
-        test.equal(modelFromDb._rev, model.rev);
-        test.equal(modelFromDb.rfc, model.rfc);        
-        test.equal(modelFromDb.nombre, model.nombre);
-        test.equal(modelFromDb.email, model.email);
-        test.equal(modelFromDb.calle, model.calle); 
-        test.equal(modelFromDb.numeroExterior, model.numeroExterior);
-        test.equal(modelFromDb.numeroInterior, model.numeroInterior);
-        test.equal(modelFromDb.colonia, model.colonia);
-        test.equal(modelFromDb.codigoPostal, model.codigoPostal);
-        test.equal(modelFromDb.localidad, model.localidad);
-        test.equal(modelFromDb.municipio, model.municipio);
-        test.equal(modelFromDb.estado, model.estado);
-        test.equal(modelFromDb.actualizado, model.actualizado);
-        test.equal(modelFromDb.creado, model.creado);
-        test.done();
-      });
       
-    });
-  } /*,
+      return ajax.getPromise("contribuyentes", "ver", model);
+    };
 
-  testActualizarContribuyente: function(test) {
-    test.expect(17);
-    request.put({
-      url: urlPost,
-      form: model
-    },
-    function(err, response, body) {
-      let result = JSON.parse(body);
-      model.id = result.id;
-      model.rev = result.rev;
-      logUrl("POST", urlPost, response.statusCode);
-      if (err) {
-        return console.error('Error al crear contribuyente:', err);
-      }
-      test.equal(response.statusCode, 200);
-      request.get({
-        url: setUrlParams(urlGet, model)
-      }, function(err, response, body){
-        logUrl("GET", urlGet, response.statusCode, model);
-        if (err) {
-          return console.error('Error al obtener contribuyente:', err);
-        }
+    let viewCallback = function(args){
+      let response = args[0], body = args[1];
+      let modelFromDb = JSON.parse(body);
 
-        test.equal(response.statusCode, 200);
-        let modelFromDb = JSON.parse(body);
-        test.equal(modelFromDb._id, model.id);
-        test.equal(modelFromDb._rev, model.rev);
-        test.equal(modelFromDb.rfc, model.rfc);
-        test.equal(modelFromDb.nombre, model.nombre);
-        test.equal(modelFromDb.email, model.email);
-        test.equal(modelFromDb.calle, model.calle);
-        test.equal(modelFromDb.numeroExterior, model.numeroExterior);
-        test.equal(modelFromDb.numeroInterior, model.numeroInterior);
-        test.equal(modelFromDb.colonia, model.colonia);
-        test.equal(modelFromDb.codigoPostal, model.codigoPostal);
-        test.equal(modelFromDb.localidad, model.localidad);
-        test.equal(modelFromDb.municipio, model.municipio);
-        test.equal(modelFromDb.estado, model.estado);
-        test.equal(modelFromDb.actualizado, model.actualizado);
-        test.equal(modelFromDb.creado, model.creado);
-        test.done();
-      });
-    });
-  }*/
+      logUrl("GET", sitemap["contribuyentes"]["ver"]["url"], response.statusCode, model);
+
+      test.equal(response.statusCode, 200);     
+      test.equal(modelFromDb._id, model.id);
+      test.equal(modelFromDb._rev, model.rev);
+      test.equal(modelFromDb.rfc, model.rfc);
+      test.equal(modelFromDb.nombre, model.nombre);
+      test.equal(modelFromDb.email, model.email);
+      test.equal(modelFromDb.calle, model.calle);
+      test.equal(modelFromDb.numeroExterior, model.numeroExterior);
+      test.equal(modelFromDb.numeroInterior, model.numeroInterior);
+      test.equal(modelFromDb.colonia, model.colonia);
+      test.equal(modelFromDb.codigoPostal, model.codigoPostal);
+      test.equal(modelFromDb.localidad, model.localidad);
+      test.equal(modelFromDb.municipio, model.municipio);
+      test.equal(modelFromDb.estado, model.estado);
+      test.equal(modelFromDb.actualizado, model.actualizado);
+      test.equal(modelFromDb.creado, model.creado);
+      test.done();
+    }
+
+    let errorCallback = function(err){
+      return console.error('Error: ', err);
+    };
+
+    promise.then(createCallback).then(viewCallback).catch(errorCallback).done();
+   
+  }
 }
