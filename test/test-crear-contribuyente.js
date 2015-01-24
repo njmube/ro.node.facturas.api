@@ -1,8 +1,7 @@
 'use strict';
 const request = require('request'),
         nconf = require('nconf'),
-      sitemap = require('./../modules/api-site-map.json'),
-            Q = require('q');
+      sitemap = require('./../modules/api-site-map.json');
 
 nconf.file('settings.json').env();
 
@@ -12,7 +11,6 @@ const     url  = nconf.get('localhost'),
         urlGet = url + sitemap.contribuyentes[2].url;
 
 let getModel = function() {
-  //model pre-cargado
   let c = {
     id: "",
     rev: "",
@@ -56,8 +54,8 @@ exports.testCreate = {
     request.del({
       url: setUrlParams(urlDelete, model)
     },
-    function(err, httpResponse, body){
-      logUrl("DELETE", urlDelete, httpResponse.statusCode, model);
+    function(err, response, body){
+      logUrl("DELETE", urlDelete, response.statusCode, model);
       if (err) {
         return console.error('Error al borrar contribuyente:', err);
       }
@@ -68,40 +66,37 @@ exports.testCreate = {
 
   testCrearContribuyente: function(test) {
   
-    test.expect(1);
+    test.expect(17);
 
     request.post({
       url: urlPost,
       form: model
     },
-    function(err, httpResponse, body) {
+    function(err, response, body) {
       let result = JSON.parse(body);
       model.id = result.id;
       model.rev = result.rev;
-      logUrl("POST", urlPost, httpResponse.statusCode);
+      logUrl("POST", urlPost, response.statusCode);
 
       if (err) {
         return console.error('Error al crear contribuyente:', err);
       }
       
-      test.equal(httpResponse.statusCode, 201);      
-      test.done();
-    });
-  }
-}
-      /*
+      test.equal(response.statusCode, 201);      
+       
       request.get({
-        url: getUrlParams(urlGet, model)
-      }, function(err, httpResponse, body){
-
-        //logUrl("GET", urlGet, httResponse.statusCode, model);
+        url: setUrlParams(urlGet, model)
+      }, function(err, response, body){
+        
+        logUrl("GET", urlGet, response.statusCode, model);
         if (err) {
           return console.error('Error al crear contribuyente:', err);
         }
-      
+        
+        test.equal(response.statusCode, 200);
         let modelFromDb = JSON.parse(body);        
-        test.equal(modelFromDb.id, model.id);
-        test.equal(modelFromDb.rev, model.rev);
+        test.equal(modelFromDb._id, model.id);
+        test.equal(modelFromDb._rev, model.rev);
         test.equal(modelFromDb.rfc, model.rfc);        
         test.equal(modelFromDb.nombre, model.nombre);
         test.equal(modelFromDb.email, model.email);
@@ -120,4 +115,4 @@ exports.testCreate = {
       
     });
   }
-}*/
+}
