@@ -65,25 +65,29 @@ router.post('/crear/', function(req, res, next){
   
 });
 
-router.post('/actualizar/:id', function(req, res, next){
+router.put('/actualizar/:id/:rev', function(req, res, next){
   req.accepts('application/json');
+
   let deferred = Q.defer();
-  let model = JSON.parse(req.body);
-  delete model["creado"]; //do not modify creation date
-  
+  let model = req.body;
+  //delete model["creado"]; //do not modify creation date
+  model.actualizado = Date.now(); //updatad date 
+  model._rev = req.params.rev;
+  model._id = req.params.id;
+
   request.put({
-    url: url,
-    json: JSON.stringify(model)
+    url: url + '/' + req.params.id,
+    json: model
   }, 
   function(err, couchRes, body){
-    if (err) {
+    if (err) {     
       deferred.reject(err);
-    } else {
+    } else {      
       deferred.resolve([couchRes, body]);
     }
-  });
-
-  deferred.promise.then(function(args) {
+  }); 
+  
+  deferred.promise.then(function(args) {    
     let couchRes = args[0], body = args[1];
     res.status(couchRes.statusCode).json(body);
   }, function(err) {

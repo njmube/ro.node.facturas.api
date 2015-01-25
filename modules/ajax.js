@@ -10,7 +10,7 @@ const hostUrl = nconf.get('localhost');
 
 function setUrlParams(url, model) {
  if (model) {
-    url = url.replace(/:id/g, model.id).replace(/:rev/, model.rev);
+    url = url.replace(/:id/g, model.id).replace(/:rev/g, model.rev);
   }
   return url;
 }
@@ -47,7 +47,7 @@ function getRequestConfig(group, name, model){
 exports.getPromise = function(group, name, model) {
   let deferred = Q.defer();
   let req = getRequest(group, name);
-  let conf = getRequestConfig(group, name, model);
+  let conf = getRequestConfig(group, name, model);  
   
   req(conf, function(err, response, body) {
     if (err) {
